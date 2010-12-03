@@ -1,79 +1,42 @@
-Django CMS 2.0
-==============
+Grappelli CMS
+=============
 
-A Django app for managing hierarchical pages of content in multiple languages, on different sites.
+This is a fork of [divio's]((http://github.com/divio/django-cms/) [django-cms](http://www.django-cms.org) to be used with [django-grappelli](http://code.google.com/p/django-grappelli/). This is a first basically working version, in some parts a bit hacky...
 
-Django CMS handles the navigation rendering for you in multiple languages with internationalization (i18n) slugs,
-and the navigation can be extended by your own models.
+The main issues were:
 
-Pages are rendered with a template that has placeholders which get filled via plugins.
-Plugins included at the moment include the following:
+* adjusting the CMS' HTML admin templates to grappelli's template structure, mainly renaming css classes
+* modifying the admin CSS files to fit the grappelli's color scheme
+* making all the javascript's work - using the jquery file provided by grappelli with its name space
+* furthermore I added some fields I considered useful to the included plugins
 
-* File
-* Flash
-* Google Map
-* Link
-* Picture
-* HTML Snippet
-* Teaser
-* Text
-* Video
-* Twitter
+I'm no heavy user of the CMS' extended permission and moderation features, so there might be some issues left with that, feel free to report them here.
+
+Installation
+------------
+
+Installation should work exactly similar as with the original version of django-cms. See the instructions (here)[http://django-cms.readthedocs.org/installation.html].
+
+To have the text widget have the grappelli skin you need to install (django-tinymce)[http://code.google.com/p/django-tinymce/] in the first step. Then you need to configure it to use the grappelli theme, therefore add the following to your settings.py:
+
+    # url path to your tinymce javascript (usually comes with grappelli
+    # should be something like the following
+    TINYMCE_JS_URL = MEDIA_URL + 'admin/tinymce/jscripts/tiny_mce/tiny_mce.js'
+    # file system path to the files
+    TINYMCE_JS_ROOT = os.path.join(MEDIA_ROOT, "admin","tinymce", "jscripts", "tiny_mce")
+    TINYMCE_FILEBROWSER = True # if you have installed  django-filebrower
+    TINYMCE_DEFAULT_CONFIG = {
+        'relative_urls'     : False,
+        'height'            : 400,
+        'width'             : 640,
+        'mode'              : "textareas",
+        'theme'				: "advanced",
+        'language'			: "en",
+        'skin'				: "grappelli",
+        'browsers'			: "gecko, safari"
+	}
+
+This should make it basically working. Of course there are a lot of other options to configure for the editor, see for example (grappelli's complete editor setup)[https://code.google.com/p/django-grappelli/source/browse/trunk/grappelli/media/tinymce_setup/tinymce_setup.js] as an example to start with.
 
 
-Many more are in the works.  Plugins are very easy to write and integrate with your own models.  
-For a list of 3rd party plugins have a look [here](http://www.django-cms.org/en/extensions/).
-
-Tour & Screenshots
-------------------
-
-Can be found [here](http://www.django-cms.org/en/tour/).
-Some Sites done with django-cms can be found [here](http://www.django-cms.org/en/sites/)
-
-
-
-Documentation
--------------
-
-Can be found [here](http://www.django-cms.org/en/documentation/).
-
-Installation instructions can be found [here](http://www.django-cms.org/en/documentation/2.0/installation/).
-
-
-Sourcecode
-----------
-
-Can be found [here](http://github.com/divio/django-cms/) on github.
-
-Running tests
--------------
-
-`virtualenv` is highly recommended to run tests.
-
-Here's a quick drilldown on how this should work on a unix system:
-- virtualenv --no-site-packages <this directory>
-- source bin/activate
-- ./runtests.sh
-
-The first run will bork and complain about PIL (since it's not always available as an egg, it's not in the dependencies).
-Running `easy_install pil` should take care of it on linuxes.
-
-Help
-----
-
-There is a [google group mailinglist](http://groups.google.com/group/django-cms)
-You can also visit the project website at [django-cms.org](http://www.django-cms.org/)
-or #django-cms on freenet IRC for more info.
-
-For a feature comparison of all the CMS apps available for django see
-[CMSComparison](http://code.djangoproject.com/wiki/CMSAppsComparison).
-
-Kudos
------
-
-- This is a fork of django-page-cms.
-- Some icons are from [http://www.famfamfam.com](http://www.famfamfam.com/)
-- Video plugin uses [OSFlashVideoPlayer](http://github.com/FlashJunior/OSFlashVideoPlayer)
-- Includes [Wymeditor](http://www.wymeditor.org/)
-- Tree Component from [jstree.com](http://www.jstree.com/)
 
