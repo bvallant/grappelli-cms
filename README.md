@@ -1,7 +1,7 @@
 Grappelli CMS
 =============
 
-This is a fork of [divio's]((http://github.com/divio/django-cms/) [django-cms](http://www.django-cms.org) to be used with [django-grappelli](http://code.google.com/p/django-grappelli/). This is a first basically working version, in some parts a bit hacky...
+This is a fork of [divio's](http://github.com/divio/django-cms/) [django-cms](http://www.django-cms.org) to be used with [django-grappelli](http://code.google.com/p/django-grappelli/). This is a first basically working version, in some parts a bit hacky...
 
 The main issues were:
 
@@ -17,7 +17,7 @@ Installation
 
 Installation should work exactly similar as with the original version of django-cms. See the instructions (here)[http://django-cms.readthedocs.org/installation.html].
 
-To have the text widget have the grappelli skin you need to install (django-tinymce)[http://code.google.com/p/django-tinymce/] in the first step. Then you need to configure it to use the grappelli theme, therefore add the following to your settings.py:
+To have the text widget have the grappelli skin you need to install [django-tinymce](http://code.google.com/p/django-tinymce/) in the first step. Then you need to configure it to use the grappelli theme, therefore add the following to your settings.py:
 
     # url path to your tinymce javascript (usually comes with grappelli
     # should be something like the following
@@ -36,7 +36,7 @@ To have the text widget have the grappelli skin you need to install (django-tiny
         'browsers'			: "gecko, safari"
 	}
 
-This should make it basically working. Of course there are a lot of other options to configure for the editor, see for example (grappelli's complete editor setup)[https://code.google.com/p/django-grappelli/source/browse/trunk/grappelli/media/tinymce_setup/tinymce_setup.js] as an example to start with.
+This should make it basically working. Of course there are a lot of other options to configure for the editor, see for example [grappelli's complete editor setup](https://code.google.com/p/django-grappelli/source/browse/trunk/grappelli/media/tinymce_setup/tinymce_setup.js) as an example to start with.
 
 
 
