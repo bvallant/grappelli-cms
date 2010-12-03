@@ -6,6 +6,7 @@ from cms.models import CMSPlugin
 from os.path import basename
 
 class Flash(CMSPlugin):
+    title = models.CharField(_("title"), max_length=100, null=True, blank=True)
     file = models.FileField(_('file'), upload_to=CMSPlugin.get_media_path, help_text=_('use swf file'))
     width = models.CharField(_('width'), max_length=6)
     height = models.CharField(_('height'), max_length=6)    

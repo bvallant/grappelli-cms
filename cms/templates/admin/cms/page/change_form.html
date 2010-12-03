@@ -4,6 +4,10 @@
 
 {% block extrahead %}
 {{ block.super }}
+<script type="text/javascript">
+	$ = django.jQuery;
+	jQuery = django.jQuery;
+</script>
 <script type="text/javascript" src="{% url admin:jsi18n %}"></script>
 
 {% if not add %}
@@ -23,34 +27,30 @@
 	        }
 	    });
 	});
-})(jQuery);
+})(django.jQuery);
 //]]>
 </script>
 {% endif %}
 
 <style type="text/css">
 
-.language_button { 
-    font-weight:bold;
-    margin-bottom:-1px; 
-    border-color:#DDDDDD #AAAAAA #CCCCCC #DDDDDD !important; 
-    border:1px;  
-    background:white url({{ ADMIN_MEDIA_URL }}img/admin/nav-bg.gif) repeat-x scroll center bottom !important;
-    }
 
-#lang_tab_content h2.header {
-    margin: 0;
-    padding: 2px 5px 3px 5px;
-    font-size: 11px;
-    text-align: left;
-    font-weight: bold;
-    background: #7CA0C7 url({{ ADMIN_MEDIA_URL }}img/admin/default-bg.gif) top left repeat-x;
-    color: white;
+.plugin-holder div.column,
+.plugin-holder div.row {
+	margin: 0 !important;
+	padding: 0 !important;
 }
+#pagepermission_set-group .module.table .thead * {
+	white-space:normal;
+}
+{% if not add %}
+{% if show_language_tabs %}
+fieldset.general {
+	border-radius: 	border-radius: 0px 4px 4px 4px !important; -moz-border-radius: 0px 4px 4px 4px !important; -webkit-border-radius:  0px 4px 4px 4px !important;
 
-.notfilled{
-    color: #808080 !important;
-
+}
+{% endif %}
+{% endif %}
 </style>
 
 
@@ -58,7 +58,7 @@
 
 
 {% block breadcrumbs %}{% if not is_popup %}
-<div class="breadcrumbs">
+<div id="breadcrumbs">
      <a href="../../../">{% trans "Home" %}</a> &rsaquo;
      <a href="../../">{{ app_label|capfirst|escape }}</a> &rsaquo; 
      {% if has_change_permission %}<a href="../">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %} &rsaquo; 
@@ -83,11 +83,10 @@
 	
 {% endblock %}
 
-{% block content %}<div id="content-main">
 
 {% block object-tools %}
 {% if change %}{% if not is_popup %}
-  <ul class="object-tools">
+  <ul class="tools">
 	{% if moderation_delete_request %}<li><a href="remove-delete-state/" class="approvelink">{% trans "Remove delete request" %}</a></li>{% endif %}  	
 	{% if moderator_should_approve %}
 	<li><a href="approve/" class="approvelink">{% if moderation_delete_request %}{% trans "Approve delete" %}{% else %}{% trans "Approve" %} {% trans "draft" %}{% endif %}</a></li>
@@ -100,6 +99,7 @@
 {% endif %}{% endif %}
 {% endblock %}
 
+{% block content %}
 
 <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="?language={{ language }}{%if request.GET.target %}&amp;target={{ request.GET.target }}{% endif %}&amp;{%if request.GET.target %}position={{ request.GET.position }}{% endif %}" method="post" id="page_form">{% csrf_token %}{% block form_top %}{% endblock %}
 {{ adminForm.fields.parent }}
@@ -118,9 +118,7 @@
 
 
 <div id="lang_tab_content">
-{% if show_language_tabs %}
-<h2 class="header"></h2>
-{% endif %}
+
 {% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
 {% if save_on_top %}{% submit_row %}{% endif %}
 {% if errors %}
@@ -142,23 +140,24 @@
 
 {% if not add %}
 	{% if CMS_PERMISSION and has_change_permissions_permission %}
-		<div class="inline-group">
-			<div class="tabular inline-related">
-				<fieldset id="inherited_permissions" class="module aligned collapse">
-				  <h2>{% trans 'All permissions' %}</h2>
-				  <div class="loading">{% trans 'Loading...' %}</div>
+			<div class="group collapse closed tabular loader">
+				<h2 class="collapse-handler">{% trans 'All permissions' %}</h2>
+				<div class="module">
+				<fieldset id="inherited_permissions">
+				  <div class="loading row">{% trans 'Loading...' %}</div>
 				  <div class="load">./permissions/</div>
 				</fieldset>
+				</div>
 			</div>
-		</div>
 	{% endif %}
 
 	{% if CMS_MODERATOR and has_moderate_permission %}
-		<div class="inline-group">
-			<div class="tabular inline-related">
-				<fieldset id="inherited_permissions" class="module aligned collapse">
-				  <h2 class="load_remote">{% trans 'Page states' %}</h2>
-				  <div class="loading">{% trans 'Loading...' %}</div>
+		<div class="group collapse closed tabular loader">
+			<h2 class="collapse-handler load_remote">{% trans 'Page states' %}</h2>
+			<div class="module">
+				<fieldset id="inherited_permissions" >
+				  
+				  <div class="loading row">{% trans 'Loading...' %}</div>
 				  <div class="load">./moderation-states/</div>
 				</fieldset>
 			</div>
@@ -259,7 +258,7 @@
 					}
 				});
 			});
-		})(jQuery);
+		})(django.jQuery);
 		//]]>
 		</script>
 	{% endif %}
@@ -269,9 +268,11 @@
 {% block after_related_objects %}{% endblock %}
 
 {% if add %}
-	<div class="submit-row"{% if is_popup %} style="overflow: auto;"{% endif %}>
-		<input type="submit" name="_save" class="default" value="{% trans 'Save' %}" {{ onclick_attrib }}/>
-		<input type="submit" name="_continue" value="{% trans 'Save and continue editing' %}" {{ onclick_attrib }}/>
+	<div class="module footer">
+	    <ul class="submit-row">
+			<li class="submit-button-container"><input type="submit" name="_save" class="default" value="{% trans 'Save' %}" {{ onclick_attrib }}/></li>
+			<li class="submit-button-container"><input type="submit" name="_continue" value="{% trans 'Save and continue editing' %}" {{ onclick_attrib }}/></li
+		</ul>
 	</div>
 {% else %}
 	{% if not moderation_delete_request %}{% page_submit_row %}{% endif %}
@@ -285,5 +286,5 @@
 {% prepopulated_fields_js %}
 
 </div>
-</form></div>
+</form>
 {% endblock %}

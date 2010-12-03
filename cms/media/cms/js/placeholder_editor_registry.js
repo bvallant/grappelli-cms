@@ -16,7 +16,7 @@
 
 var PlaceholderEditorRegistry = {};
 
-jQuery.extend(PlaceholderEditorRegistry,
+django.jQuery.extend(PlaceholderEditorRegistry,
               {
                   registerEditor : function(fieldname, editor) {
                       PlaceholderEditorRegistry.STORE[fieldname] = editor;

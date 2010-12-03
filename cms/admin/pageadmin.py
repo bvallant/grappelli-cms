@@ -131,7 +131,7 @@ class PageAdmin(model_admin):
         }),
         (_('Advanced Settings'), {
             'fields': advanced_fields,
-            'classes': ('collapse',),
+            'classes': ('collapse closed',),
         }),
 
 
@@ -140,7 +140,7 @@ class PageAdmin(model_admin):
     if settings.CMS_SEO_FIELDS:
         fieldsets.append((_("SEO Settings"), {
                           'fields':seo_fields,
-                          'classes': ('collapse',),
+                          'classes': ('collapse closed',),
                         }))
 
     inlines = PAGE_ADMIN_INLINES
@@ -151,14 +151,15 @@ class PageAdmin(model_admin):
                 'css/rte.css',
                 'css/pages.css',
                 'css/change_form.css',
-                'css/jquery.dialog.css',
+                #'css/jquery.dialog.css',
             )]
         }
         js = [os.path.join(settings.CMS_MEDIA_URL, path) for path in (
-            'js/lib/jquery.js',
+            #'js/lib/jquery.js',
+            'js/lib/restore.jquery.js',
             'js/lib/jquery.query.js',
-            'js/lib/ui.core.js',
-            'js/lib/ui.dialog.js',
+            #'js/lib/ui.core.js',
+            #'js/lib/ui.dialog.js',
 
         )]
 

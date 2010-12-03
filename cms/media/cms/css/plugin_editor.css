@@ -3,6 +3,8 @@ select[name="plugins"] {
 }
 
 .plugin-holder-nopage{
+    border-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .plugin-holder-config{
@@ -62,7 +64,7 @@ ul.plugin-list li{
 	background:#fff url(../images/sitemap-li-bg.jpg) repeat-x 0px 0px;
 	line-height:27px;
 	cursor:pointer;
-	color:#5B80B2;
+	color:#309bbf;
 }
 
 ul.plugin-list li.active{
@@ -96,7 +98,7 @@ ul.plugin-list span.delete{
 	_filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/media/cms/images/pluginlist-delete.png',sizingMethod='crop');	
 }
 
-ul.plugin-list li:hover{background-position:0px -100px; color:#fff;}
+ul.plugin-list li:hover{background: #309bbf; color:#fff;}
 ul.plugin-list li:hover .drag{background-position:0px -40px;}
 ul.plugin-list li:hover span.delete{background-position:0px -40px;}
 
@@ -107,11 +109,15 @@ ul.plugin-list li.active:hover .drag{background-position:0px -40px;}
 
 .plugin-editor{
 	width:auto;
+	background: #eee;
 /*	margin-right:-310px;300*/
 	margin-left:300px;
 	/*margin:10px 0px 10px 310px;*/
 	padding:0px;
 	float:none;
+}
+.plugin-holder div.row {
+	background: #eee;
 }
 
 .plugin-editor iframe{

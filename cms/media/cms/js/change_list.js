@@ -462,4 +462,4 @@
 	function addUndo(node, target, position){
 		undos.push({node:node, target:target, position:position});
 	}
-})(jQuery);
+})(django.jQuery.noConflict());

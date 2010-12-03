@@ -2,11 +2,10 @@
     $(document).ready(function() {
         // Add Plugin Handler
         $('span.add-plugin').click(function(){
-         var select = $(this).parent().children("select[name=plugins]");
+        	var select = $(this).parent().children("select[name=plugins]");
             var pluginvalue = select.attr('value');
             var placeholder_id = $(this).parent().parent().data('id');
             var splits = window.location.href.split("/");
- 
             var language = $('input.language_button.selected').attr('name');
  
             if (!language) {
@@ -153,7 +152,7 @@
     }
  
 function loadPluginForm(target, id){
-        var object = '<iframe id="iframe_'+id+'" src="edit-plugin/'+id+'/" frameborder="0"></iframe>';
+        var object = '<iframe style="background:#eee; overflow: hidden;" id="iframe_'+id+'" src="edit-plugin/'+id+'/" frameborder="0"></iframe>';
         target.html(object);
         $('ul.plugin-list .active').removeClass("active");
         $('#plugin_'+id).addClass("active");
@@ -173,4 +172,4 @@ function loadPluginForm(target, id){
         $('#iframe_'+id).parent().html("<p>"+msg+"</p>");
     }
  
-})(jQuery);
+})(django.jQuery);

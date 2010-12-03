@@ -7,6 +7,9 @@ from os.path import basename
 
 class Video(CMSPlugin):
     # player settings
+    title = models.CharField(_("title"), max_length=100, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)   
+
     movie = models.FileField(_('movie file'), upload_to=CMSPlugin.get_media_path, help_text=_('use .flv file or h264 encoded video file'), blank=True, null=True)
     movie_url = models.CharField(_('movie url'), max_length=255, help_text=_('vimeo or youtube video url. Example: http://www.youtube.com/watch?v=YFa59lK-kpo'), blank=True, null=True)
     image = models.ImageField(_('image'), upload_to=CMSPlugin.get_media_path, help_text=_('preview image file'), null=True, blank=True)

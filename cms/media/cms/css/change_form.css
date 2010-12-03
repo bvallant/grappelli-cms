@@ -44,11 +44,34 @@ ul#page_form_lang_tabs a:hover {
 }
 
 
-.language_button.selected { 
-    margin-bottom:-2px;
+.language_button {
+	color: #444;
+	background-color: #e3e3e3;
+	border: 1px  solid #bdbdbd !important;
     border-bottom:0px !important;
-    color:#fff;
-    background:#bcd2e9 !important;
+	border-color: #000;
+	border-radius: 4px 4px 0 0 !important; -moz-border-radius: 4px 4px 0 0 !important; -webkit-border-radius:  4px 4px 0 0 !important;
+	padding: 10px 15px 20px 15px!important;
+	margin-right: 4px;
 }
+.language_button:hover {
+	color: #212121 !important;
+}
+.notfilled{
+	background: #eee !important;
+    background: -moz-linear-gradient(top, #bbb, #d0d0d0) !important;
+	color: #888 !important;
+    background: -webkit-gradient(linear, left top, left bottom, from(#d0d0d0), to(#eee)) !important;
+}
+
+.language_button.selected { 
+	padding-top: 14px;
+    margin-bottom:-2px;
+    color:#444;
+	background: #eee !important;
+    background: -moz-linear-gradient(top, #d0d0d0, #eee) !important;
+    background: -webkit-gradient(linear, left top, left bottom, from(#d0d0d0), to(#eee)) !important;
+}
+
 
 .deletetranslation { margin-left: 30px; }

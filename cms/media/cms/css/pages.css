@@ -56,8 +56,8 @@ td.actions a{
 
 #site-selector {
 	float:left; 
-	margin-top:2px; 
-	margin-left:5px; 
+	margin-top:10px; 
+	margin-left:10px; 
 	margin-right:10px;
 }
 
@@ -157,7 +157,7 @@ div#sitemap li, div#sitemap ul{list-style-type: none;}
 #sitemap li, #sitemap ul{ display:block; }
 
 #sitemap li .cont{ display:block; background:url(../images/sitemap-li-bg.jpg) repeat-x 0px 0px; }
-#sitemap .cont:hover { background-position: 0px -100px !important; }
+#sitemap .cont:hover { background: #309bbf; }
 
 #sitemap li .col1 .title, #sitemap li .col1 .success{
 	display:block;
@@ -211,10 +211,10 @@ div#sitemap li, div#sitemap ul{list-style-type: none;}
 	float:left;
 	display:block;
 	background-color:#fff;
-	padding-left:3px;
-	padding-right:3px;
+	padding-left:7px;
+	padding-right:7px;
 	white-space:nowrap;
-	filter: alpha(opacity=70);
+	filter: alpha(opacity=60);
 	-moz-opacity: 0.70;
 	opacity: 0.70;
 }
@@ -234,7 +234,7 @@ div#sitemap li, div#sitemap ul{list-style-type: none;}
 #sitemap li .col-actions a{ vertical-align:middle}
 #sitemap li .col-published a, #sitemap li .col-published input, #sitemap li .col-published label{ vertical-align:middle;}
 #sitemap li .col-draft a, #sitemap li .col-draft span{vertical-align:middle; margin-top:0;}
-#sitemap li  .col-navigation img{vertical-align:middle;}
+#sitemap li  .col-navigation img, #sitemap li  .col-navigation input{vertical-align:middle;}
 
 
 /*
@@ -303,12 +303,14 @@ div#sitemap ul.header, div#sitemap ul.header li{
 	padding:0px;
 }
 div#sitemap ul.header li{
-	background:#E1E1E1 url(../images/nav-bg.gif) repeat-x scroll left top;
+	/*background:#E1E1E1 url(../images/nav-bg.gif) repeat-x scroll left top;*/
+	background: -webkit-gradient(linear, left top, left bottom, from(#eee), to(#e0e0e0));
+    background: -moz-linear-gradient(top, #eee, #e0e0e0);
 	border-bottom:1px solid #DDDDDD;
 	color:#666666;
 	font-size:11px;
 	padding:2px 0px 2px 5px;
-	font-weight:bold;
+	font-weight:normal;
 	height:auto;
 }
 * html div#sitemap ul.header li{height:16px;}
@@ -470,3 +472,25 @@ div#sitemap ul.header li{
 
 /* loading message */
 #loader-message { position: fixed; top: 0px; right: 0px; padding: 4px 8px; background-color: #f1f8ff; display: none;}
+
+.addlink {
+    padding-left: 12px;
+    background: url(../images/icon_addlink.gif) 0 .2em no-repeat;
+}
+
+.changelink {
+    padding-left: 12px;
+    /* background: url(../images/icon_addlink.gif) 0 .2em no-repeat; */
+}
+.deletelink {
+    padding-left: 12px;
+    background: url(../images/icon_deletelink.gif) 0 .25em no-repeat;
+}
+
+a.deletelink:link, a.deletelink:visited {
+    color: #CC3434;
+}
+
+a.deletelink:hover {
+    color: #993333;
+}

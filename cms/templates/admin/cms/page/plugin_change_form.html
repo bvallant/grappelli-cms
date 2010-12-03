@@ -38,9 +38,13 @@
 		window.onload = runOnLoad.run;
 	}
 	runOnLoad(function(){
-		parent.setiframeheight($('body').height()+20, {{ plugin.pk }});
+		//parent.setiframeheight($('body').scrollHeight, {{ plugin.pk }});
+		parent.setiframeheight($('#container').height()+25, {{ plugin.pk }});
 	});
 	$(document).ready(function(){
+		
+	
+
 		$("a.add-another,a.related-lookup").each(function(i, sign){
 			var href = $(sign).attr("href")
 			if (href.substr(0,2) == ".."){
@@ -49,14 +53,21 @@
 			}
 		});
 	});
-})(jQuery);
+})(django.jQuery);
 //]]>
 </script>
 
 
 {% endblock %}
  
-{% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />{% endblock %}
+{% block extrastyle %}<link rel="stylesheet" type="text/css" href="{% admin_media_prefix %}css/forms.css" />
+<style>
+	#text_form fieldset {
+		border: 0;
+	}
+	html, body, #content-main, .popup, .gray {background: #eee !important;}
+</style>
+{% endblock %}
  
 {% block coltype %}{% if ordered_objects %}colMS{% else %}colM{% endif %}{% endblock %}
  
@@ -71,10 +82,10 @@
 </div>
 {% endif %}{% endblock %}
  
-{% block content_title %}<h2>{{ plugin.get_plugin_name }}</h2>{% endblock %}
+{% block content_title %}<!--h2>{{ plugin.get_plugin_name }}</h2-->{% endblock %}
  
 {% block content %}<div id="content-main">
-{% block top %}{% if preview %}{% render_plugin plugin %}{% endif %}{% endblock %}
+{% block top %}{% if preview %}{% render_plugin plugin %}{% endif %}<br />{% endblock %}
 <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.module_name }}_form">{% csrf_token %}{% block form_top %}{% endblock %}
 <div>
 {% if is_popup %}<input type="hidden" name="_popup" value="1" />{% endif %}
@@ -109,8 +120,12 @@
 {% prepopulated_fields_js %}
  
 </div>
-<input class="" type="submit" value="{% trans "Save" %}" name="_save"/>
+<div class="submit-row">
+<input class="" type="submit" value="{% trans "Save" %}" name="_save"/></div>
 </form>
 
 </div>
+
 {% endblock %}
+{% block footer %}{% endblock %}
+

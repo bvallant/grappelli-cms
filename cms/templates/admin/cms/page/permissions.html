@@ -31,7 +31,7 @@
 						{% endif %}
 					</td>			
 					<td class="user">{{ permission.user|default_if_none:"-" }}</td>
-					<td class="group">{{ permission.group|default_if_none:"-" }}</td>
+					<td class="user_group">{{ permission.group|default_if_none:"-" }}</td>
 					<td class="can_change">{{ permission.can_change|boolean_icon }}</td>
 					<td class="can_add">{{ permission.can_add|boolean_icon }}</td>
 					<td class="can_delete">{{ permission.can_delete|boolean_icon }}</td>
@@ -46,5 +46,5 @@
 		</tbody>
 	</table>
 {% else %}
-	<p>{% trans "Page doesn't inherit any permissions." %}</p>
+	<div class="row">{% trans "Page doesn't inherit any permissions." %}</div>
 {% endif %}

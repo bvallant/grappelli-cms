@@ -1,4 +1,5 @@
 {% load i18n %}
+{% if object.title %}<h2>{{ object.title }}</h2>{% endif %}
 <div class="plugin_googlemap">
 	<!--  ATTENTION: set a height for this div in CSS -->
 	<div id="google-map-{{ object.id }}" class="googlemap-map"></div>
