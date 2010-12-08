@@ -1,0 +1,26 @@
+{% load i18n %}
+{% if object.title %}
+<h2>{{ object.title|title }}</h2>
+{% endif %}
+{% if not request.user.is_authenticated %}
+<form action="{{ request.path }}" method="post" class="loginForm">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="hidden" name="{{ form_name }}" value="1" />
+	<input type="submit" name="login" value="{% trans "Login" %}" class="loginButton"/>
+</form>
+{% if object.forget_password %}
+	<a href="" class="forgetPassword">{% trans "I have forgotten my password!" %}</a>
+{% endif %}
+{% else %}
+{% if object.welcome %}
+<p class="welcomeBack">{% trans "Welcome back" %}, {{ user_name }}!</p>
+{% endif %}
+{% if object.logout %}
+<form action="{{ request.path }}" method="post">
+	{% csrf_token %}
+	<input type="submit" name="logout" value="{% trans "Logout" %}" class="logoutButton"/>
+	<input type="hidden" name="{{ form_name }}" value="1" />
+</form>
+{% endif %}
+{% endif %}
