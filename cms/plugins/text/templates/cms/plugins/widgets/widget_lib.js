@@ -7,9 +7,8 @@ function escapeHtml(html) {
         .replace(/>/g,"&gt;");
 }
 
-
 function add_plugin(type, parent_id, language){
-	$.post("add-plugin/", {
+	django.jQuery.post("add-plugin/", {
 		parent_id: parent_id,
 		plugin_type: type
 	}, function(data) {
@@ -32,6 +31,7 @@ function add_plugin(type, parent_id, language){
 		}
 	}, "html");
 }
+
 
 function edit_plugin(obj_id) {
     editPluginPopupCallbacks[obj_id] = function(plugin_id, icon_src, icon_alt){
@@ -61,6 +61,20 @@ function plugin_admin_html(plugin_id, icon_src, icon_alt) {
 }
 
 
+
+
+
+/* General functions */
+function get_editor(placeholder) {
+    // Find the placeholder text editor widget
+if (typeof(PlaceholderEditorRegistry) == "undefined") {
+    // This could occur if javascript defining PlaceholderEditorRegistry
+    // has not been loaded for some reason.
+    alert("{% filter escapejs %}{% trans "A programming error occurred - cannot find text editor widgets." %}{% endfilter %}");
+        return null;
+    }
+    return PlaceholderEditorRegistry.retrieveEditor(placeholder);
+}
 // Global function, needed for popup window to call the parent via opener.dismissEditPluginPopup
 function dismissEditPluginPopup(win, plugin_id, icon_src, icon_alt) {
     // This is called after user presses 'Save' in popup.
@@ -70,16 +84,3 @@ function dismissEditPluginPopup(win, plugin_id, icon_src, icon_alt) {
         callback(plugin_id, icon_src, icon_alt);
     }
 }
-
-/* General functions */
-function get_editor(placeholder) {
-    // Find the placeholder text editor widget
-    if (typeof(PlaceholderEditorRegistry) == "undefined") {
-        // This could occur if javascript defining PlaceholderEditorRegistry
-        // has not been loaded for some reason.
-        alert("{% filter escapejs %}{% trans "A programming error occurred - cannot find text editor widgets." %}{% endfilter %}");
-        return null;
-    }
-    return PlaceholderEditorRegistry.retrieveEditor(placeholder);
-}
-
