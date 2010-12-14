@@ -13,6 +13,7 @@ class VideoPlugin(CMSPluginBase):
     render_template = "cms/plugins/video.html"
     
     general_fields = [
+        'title', 'description',
         ('movie', 'movie_url'),
         'image',
         ('width', 'height'),
@@ -41,7 +42,7 @@ class VideoPlugin(CMSPluginBase):
         fieldsets += [
             (_('Color Settings'), {
                 'fields': color_fields,
-                'classes': ('collapse',),
+                'classes': ('collapse closed',),
             }),
         ]
     
