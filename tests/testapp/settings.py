@@ -1,6 +1,6 @@
 # Django settings for cms project.
 import os
-PROJECT_DIR = os.path.dirname(__file__)
+PROJECT_DIR = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -99,6 +99,8 @@ INSTALLED_APPS = (
     'mptt',
     'testapp.sampleapp',
     'testapp.placeholderapp',
+    'testapp.pluginapp',
+    'testapp.pluginapp.plugins.manytomany_rel',
     'south',
     'reversion',
 )
@@ -162,6 +164,10 @@ CMS_HIDE_UNTRANSLATED = False
 CMS_URL_OVERWRITE = True
 
 SOUTH_TESTS_MIGRATE = False
+
+CMS_NAVIGATION_EXTENDERS = (
+    ('testapp.sampleapp.menu_extender.get_nodes', 'SampleApp Menu'),
+)
 
 try:
     from local_settings import *
