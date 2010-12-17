@@ -50,6 +50,11 @@ class ToolbarMiddleware(object):
             pass
         if request.path_info.startswith(urlparse.urlparse(settings.MEDIA_URL)[2]):
             return False
+        try:
+            if request.path_info.startswith(urlparse.urlparse(settings.MEDIA_URL)[2]):
+                return False
+        except:
+            pass
         if "edit" in request.GET:
             return True
         if not hasattr(request, "user"):
