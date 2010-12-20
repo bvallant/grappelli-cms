@@ -4,10 +4,12 @@
 {% endif %}
 {% if not request.user.is_authenticated %}
 <form action="{{ request.path }}" method="post" class="loginForm">
-	{% csrf_token %}
 	{{ form.as_p }}
-	<input type="hidden" name="{{ form_name }}" value="1" />
-	<input type="submit" name="login" value="{% trans "Login" %}" class="loginButton"/>
+	<p class="submit">
+		{% csrf_token %}
+		<input type="hidden" name="{{ form_name }}" value="1" />
+		<input type="submit" name="login" value="{% trans "Login" %}" class="loginButton"/>
+	</p>
 </form>
 {% if object.forget_password %}
 	<a href="" class="forgetPassword">{% trans "I have forgotten my password!" %}</a>
@@ -18,9 +20,11 @@
 {% endif %}
 {% if object.logout %}
 <form action="{{ request.path }}" method="post">
-	{% csrf_token %}
-	<input type="submit" name="logout" value="{% trans "Logout" %}" class="logoutButton"/>
-	<input type="hidden" name="{{ form_name }}" value="1" />
+	<p class="submit">
+		{% csrf_token %}
+		<input type="submit" name="logout" value="{% trans "Logout" %}" class="logoutButton"/>
+		<input type="hidden" name="{{ form_name }}" value="1" />
+	</p>
 </form>
 {% endif %}
 {% endif %}

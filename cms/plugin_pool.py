@@ -3,6 +3,7 @@ from cms.plugin_base import CMSPluginBase
 from cms.utils.helpers import reversion_register
 from django.conf import settings
 from django.utils.importlib import import_module
+import ipdb
 
 class PluginPool(object):
     def __init__(self):
