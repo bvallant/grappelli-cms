@@ -5,12 +5,14 @@ from django.conf import settings
 def mark_descendants(nodes):
     for node in nodes:
         node.descendant = True
-        mark_descendants(node.childrens)
+        mark_descendants(node.children)
 
-def make_tree(request, items, levels, url, ancestors, descendants=False, current_level=0, to_levels=100, active_levels=0):
-    from cms.models import Page
+def make_tree(items, levels, url, ancestors, descendants=False, 
+              current_level=0, to_levels=100, active_levels=0):
+    from cms.models import Page # Probably avoids circular imports...
     """
-    builds the tree of all the navigation extender nodes and marks them with some metadata
+    Builds the tree which gets displayed in the CMSChangeList (in the admin 
+    view, the nice Javascript tree of pages you get)
     """
     levels -= 1
     current_level += 1
@@ -47,7 +49,7 @@ def make_tree(request, items, levels, url, ancestors, descendants=False, current
         if levels == 0 and not hasattr(item, "ancestor" ) or item.level == to_levels or not hasattr(item, "childrens"):
             item.childrens = []
         else:
-            make_tree(request, item.childrens, levels, url, ancestors+[item], descendants, current_level, to_levels, active_levels) 
+            make_tree(item.childrens, levels, url, ancestors+[item], descendants, current_level, to_levels, active_levels) 
     if found:
         for item in items:
             if not hasattr(item, "selected"):
@@ -67,8 +69,8 @@ def get_extended_navigation_nodes(request, levels, ancestors, current_level, to_
             if anc.selected:
                 descendants = True
     if len(ancestors) and hasattr(ancestors[-1], 'ancestor'):
-        make_tree(request, items, 100, request.path, ancestors, descendants, current_level, 100, active_levels)
-    make_tree(request, items, levels, request.path, ancestors, descendants, current_level, to_levels, active_levels)
+        make_tree(items, 100, request.path, ancestors, descendants, current_level, 100, active_levels)
+    make_tree(items, levels, request.path, ancestors, descendants, current_level, to_levels, active_levels)
     if mark_sibling:
         for item in items:
             if not hasattr(item, "selected" ):
@@ -113,14 +115,16 @@ def find_children(target, pages, levels=100, active_levels=0, ancestors=None, se
             if hasattr(page, "selected"):
                 mark_sibling = True
     if target.navigation_extenders and (levels > 0 or target.pk in ancestors) and not no_extended and target.level < to_levels:
-        target.childrens += get_extended_navigation_nodes(request, 
-                                                          levels, 
-                                                          list(target.ancestors_ascending) + [target], 
-                                                          target.level, 
-                                                          to_levels,
-                                                          active_levels,
-                                                          mark_sibling,
-                                                          target.navigation_extenders)
+        target.childrens += get_extended_navigation_nodes(
+          request, 
+          levels, 
+          list(target.ancestors_ascending) + [target], 
+          target.level, 
+          to_levels,
+          active_levels,
+          mark_sibling,
+          target.navigation_extenders
+        )
 
 def cut_levels(nodes, level):
     """
@@ -131,7 +135,7 @@ def cut_levels(nodes, level):
         if nodes[0].level == level:
             return nodes
     for node in nodes:
-        result += cut_levels(node.childrens, level)
+        result += cut_levels(node.children, level)
     return result
 
 def find_selected(nodes):
@@ -142,7 +146,7 @@ def find_selected(nodes):
         if hasattr(node, "selected"):
             return node
         if hasattr(node, "ancestor"):
-            result = find_selected(node.childrens)
+            result = find_selected(node.children)
             if result:
                 return result
             

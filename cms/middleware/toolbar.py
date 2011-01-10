@@ -1,19 +1,18 @@
 """
 Edit Toolbar middleware
 """
-import urlparse
 from cms import settings as cms_settings
 from cms.utils import get_template_from_request
 from cms.utils.plugins import get_placeholders
-from django.conf import settings
+from cms.utils.urlutils import is_media_request
 from django.contrib.auth import authenticate, login, logout
 from django.core.urlresolvers import reverse, NoReverseMatch
-from django.http import HttpResponseRedirect
-from django.template.context import Context, RequestContext
+from django.template.context import RequestContext
 from django.template.defaultfilters import title, safe
 from django.template.loader import render_to_string
 from django.utils import simplejson
 from django.utils.encoding import smart_unicode
+from django.utils.translation import ugettext as _
 
 HTML_TYPES = ('text/html', 'application/xhtml+xml')
 
@@ -40,15 +39,15 @@ class ToolbarMiddleware(object):
         if request.is_ajax():
             return False
         if response.status_code != 200:
-            return False 
+            return False
         if not response['Content-Type'].split(';')[0] in HTML_TYPES:
             return False
         try:
-            if request.path_info.startswith(reverse("admin:index")):
+            if request.path.startswith(reverse("admin:index")):
                 return False
         except NoReverseMatch:
             pass
-        if request.path_info.startswith(urlparse.urlparse(settings.MEDIA_URL)[2]):
+        if is_media_request(request):
             return False
         try:
             if request.path_info.startswith(urlparse.urlparse(settings.MEDIA_URL)[2]):
@@ -62,7 +61,7 @@ class ToolbarMiddleware(object):
         if not request.user.is_authenticated() or not request.user.is_staff:
             return False
         return True
-    
+
     def process_request(self, request):
         if request.method == "POST":
             if "edit" in request.GET and "cms_username" in request.POST:
@@ -90,7 +89,7 @@ class ToolbarMiddleware(object):
         """
         Renders the Toolbar.
         """
-        auth = request.user.is_authenticated() and request.user.is_staff
+        auth = request.user.is_staff or request.user.is_superuser
         edit = request.session.get('cms_edit', False) and auth
         page = request.current_page
         move_dict = []
@@ -103,10 +102,12 @@ class ToolbarMiddleware(object):
                 if not name:
                     name = cms_settings.CMS_PLACEHOLDER_CONF.get(placeholder, {}).get("name", None)
                 if not name:
-                    name = placeholder
-                d['name'] = title(name)
+                    name = title(placeholder)
+                else:
+                    name = _(name)
+                d['name'] = name
                 plugins = plugin_pool.get_all_plugins(placeholder, page)
-                d['plugins'] = [] 
+                d['plugins'] = []
                 for p in plugins:
                     d['plugins'].append(p.value)
                 d['type'] = placeholder
@@ -125,9 +126,9 @@ class ToolbarMiddleware(object):
             'auth_error':not auth and 'cms_username' in request.POST,
             'placeholder_data':data,
             'edit':edit,
+            'moderator': cms_settings.CMS_MODERATOR,
             'CMS_MEDIA_URL': cms_settings.CMS_MEDIA_URL,
         })
         #from django.core.context_processors import csrf
         #context.update(csrf(request))
         return render_to_string('cms/toolbar/toolbar.html', context, RequestContext(request))
-

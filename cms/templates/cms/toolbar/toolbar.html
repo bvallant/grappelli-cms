@@ -128,12 +128,10 @@
     <div id="cms_toolbar_col1">
         <a href="http://www.django-cms.org/" id="cms_toolbar_logo"><span>django CMS</span></a>
         {% if auth %}
-            {% if page %}
             <div id="cms_toolbar_editmode_toggle">
                 <span>{% trans "Edit mode" %}</span>
                 <a id="cms_toolbar_edit_button_{% if edit %}on{% else %}off{% endif%}" href="#">toggle</a>
             </div>
-            {% endif %}
             {% if page.last_page_states %}
             <div id="cms_toolbar_statusbar">
                 <div>
@@ -158,8 +156,8 @@
         {% endif %}    
     </div>
     <div id="cms_toolbar_col2">
-        {% if edit %}
-        {% if auth %}
+        {% if edit and page %}
+        {% if auth and moderator %}
             {% if moderator_should_approve and has_moderate_permission %}
             <a id="cms_toolbar_approvebutton" href="{% url admin:cms_page_approve_page page.pk %}" class="button green" title="{% trans 'Approve directly' %}">
                 <span class="state">{{ page_moderator_state.label }}</span>
@@ -188,7 +186,7 @@
         </div>
         {% endif %}
         {% if auth %}
-        <div id="cms_toolbar_pagebutton" class="cms_toolbar_pagebutton cms_toolbar_button cms_toolbar_submenubutton"><span><strong>Page</strong><em>arrow</em></span>        
+        <div id="cms_toolbar_pagebutton" class="cms_toolbar_pagebutton cms_toolbar_button cms_toolbar_submenubutton"><span><strong>{% trans "Page" %}</strong><em>arrow</em></span>        
             <ul id="cms_toolbar_page_menu" class="cms_toolbar_submenu">                
                 <li class="first"><a href="{% url admin:cms_page_changelist %}"><span class="cms_toolbar_icon_move">{% trans "move" %}</span>{% trans "Move/add Pages" %}</a></li>
                 {% if has_add_page_permission %}

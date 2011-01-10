@@ -1,30 +1,42 @@
+##########
 Navigation
-==========
+##########
 
-There are four template tags for use in the templates that are connected to the menu:
-``show_menu``, ``show_menu_below_id``, ``show_sub_menu``, and ``show_breadcrumb``.
+.. highlight:: html+django
 
+There are four template tags for use in the templates that are connected to the
+menu:
+
+* ``show_menu``
+* ``show_menu_below_id``
+* ``show_sub_menu``
+* ``show_breadcrumb``
+
+*********
 show_menu
----------
+*********
 
-``{& show_menu %}`` renders the navigation of the current page.
+``{% show_menu %}`` renders the navigation of the current page.
 You can overwrite the appearance and the HTML if you add a ``cms/menu.html``
 template to your project or edit the one provided with django-cms.
 ``show_menu`` takes four optional parameters: ``start_level``, ``end_level``,
 ``extra_inactive``, and ``extra_active``.
 
-The first two parameters, ``start_level`` (default=0) and ``end_level`` (default=100) specify from what level to which level
-should the navigation be rendered.
-If you have a home as a root node and don't want to display home you can render the navigation only after level 1.
+The first two parameters, ``start_level`` (default=0) and ``end_level``
+(default=100) specify from what level to which level should the navigation be
+rendered.
+If you have a home as a root node and don't want to display home you can render
+the navigation only after level 1.
 
-The third parameter, ``extra_inactive`` (default=0), specifies how many levels of navigation should be displayed
-if a node is not a direct ancestor or descendant of the current active node.
+The third parameter, ``extra_inactive`` (default=0), specifies how many levels
+of navigation should be displayed if a node is not a direct ancestor or
+descendant of the current active node.
 
-Finally, the fourth parameter, ``extra_active`` (default=100), specifies how many levels of
-descendants of the currently active node should be displayed.
+Finally, the fourth parameter, ``extra_active`` (default=100), specifies how
+many levels of descendants of the currently active node should be displayed.
 
-Some Examples:
-^^^^^^^^^^^^^^
+Some Examples
+=============
 
 Complete navigation (as a nested list)::
 
@@ -56,13 +68,31 @@ Navigation with a custom template::
 	{% show_menu 0 100 100 100 "myapp/menu.html" %}
 
 
+******************
+show_menu_below_id
+******************
 
+If you have set an id in the advanced settings of a page, you can display the
+submenu of this page with a template tag. For example, we have a page called
+meta that is not displayed in the navigation and that has the id "meta"::
+
+    <ul>
+        {% show_menu_below_id "meta" %}
+    </ul>
+
+You can give it the same optional parameters as ``show_menu``::
+
+    <ul>
+        {% show_menu_below_id "meta" 0 100 100 100 "myapp/menu.html" %}
+    </ul>
+
+*************
 show_sub_menu
--------------
+*************
 
 Display the sub menu of the current page (as a nested list).
-Takes one argument that specifies how many levels deep should the submenu be displayed.
-The template can be found at ``cms/sub_menu.html``::
+Takes one argument that specifies how many levels deep should the submenu be
+displayed. The template can be found at ``cms/sub_menu.html``::
 
 	<ul>
     	{% show_sub_menu 1 %}
@@ -74,8 +104,10 @@ Or with a custom template::
 		{% show_sub_menu 1 "myapp/submenu.html" %}
 	</ul>
 
+
+***************
 show_breadcrumb
----------------
+***************
 
 Show the breadcrumb navigation of the current page.
 The template for the HTML can be found at ``cms/breadcrumb.html``.::
@@ -86,16 +118,17 @@ Or with a custom template and only display level 2 or higher::
 
 	{% show_breadcrumb 2 "myapp/breadcrumb.html" %}
 
-If the current URL is not handled by the CMS or you are working in a navigation extender,
-you may need to provide your own breadcrumb via the template.
+If the current URL is not handled by the CMS or you are working in a navigation
+extender, you may need to provide your own breadcrumb via the template.
 This is mostly needed for pages like login, logout and third-party apps.
 
 
 .. _extending_the_menu:
 
 
+*******************************************
 Properties of Navigation Nodes in templates
--------------------------------------------
+*******************************************
 ::
 
 	{{ node.is_leaf_node }}
@@ -150,22 +183,24 @@ If true this node is a descendant of the current selected node.
 
 If true this node is a "soft root".
 
+**********
 Soft Roots
-----------
+**********
 
 "Soft roots" are pages that start a new navigation.
-If you are in a child of a soft root node you can only see the path to the soft root.
-This feature is useful if you have big navigation trees with a lot of pages and don't
-want to overwhelm the user.
+If you are in a child of a soft root node you can only see the path to the soft
+root. This feature is useful if you have big navigation trees with a lot of
+pages and don't want to overwhelm the user.
 
 To enable it put the following in your ``settings.py`` file::
 
 	CMS_SOFTROOT = True
 
-Now you can mark a page as "soft root" in the 'Advanced' tab of the page's settings in the admin interface.
+Now you can mark a page as "soft root" in the 'Advanced' tab of the page's
+settings in the admin interface.
 
-
+******************************
 Modifying & Extending the menu
-------------------------------
+******************************
 
-Please refer to the app integration documentation
+Please refer to the :doc:`app_integration` documentation

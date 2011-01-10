@@ -3,10 +3,6 @@ from cms.models.placeholdermodel import Placeholder
 from cms.plugin_rendering import PluginContext, PluginRenderer
 from cms.utils.helpers import reversion_register
 from cms.utils.placeholder import get_page_from_placeholder_if_exists
-from cms.plugin_rendering import PluginContext, PluginRenderer
-from cms.exceptions import DontUsePageAttributeWarning
-from publisher import MpttPublisher
-from publisher.mptt_support import Mptt
 from datetime import datetime, date
 from django.conf import settings
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -16,8 +12,8 @@ from django.db.models.base import ModelBase, model_unpickle, \
 from django.db.models.query_utils import DeferredAttribute
 from django.utils.translation import ugettext_lazy as _
 from os.path import join
+from publisher.mptt_support import Mptt, install_mptt
 import warnings
-from django.db.models import signals
 
 class PluginModelBase(ModelBase):
     """
@@ -27,6 +23,7 @@ class PluginModelBase(ModelBase):
         render_meta = attrs.pop('RenderMeta', None)
         if render_meta is not None:
             attrs['_render_meta'] = render_meta()
+        attrs = install_mptt(cls, name, bases, attrs)
         new_class = super(PluginModelBase, cls).__new__(cls, name, bases, attrs)
         found = False
         bbases = bases
@@ -107,7 +104,11 @@ class CMSPlugin(Mptt):
         return plugin_pool.get_plugin(self.plugin_type).name
     
     def get_short_description(self):
-        return self.get_plugin_instance()[0].__unicode__()        
+        instance = self.get_plugin_instance()[0]
+        if instance:
+            return instance.__unicode__()
+        else:
+            return _("<Empty>")
     
     def get_plugin_class(self):
         from cms.plugin_pool import plugin_pool
@@ -195,7 +196,7 @@ class CMSPlugin(Mptt):
     def set_base_attr(self, plugin):
         for attr in ['parent_id', 'placeholder', 'language', 'plugin_type', 'creation_date', 'level', 'lft', 'rght', 'position', 'tree_id']:
             setattr(plugin, attr, getattr(self, attr))
-
+    
     def copy_plugin(self, target_placeholder, target_language, plugin_tree):
         """
         Copy this plugin and return the new plugin.
@@ -239,10 +240,19 @@ class CMSPlugin(Mptt):
             plugin_instance.copy_relations(old_instance)
         return new_plugin
         
+    def post_copy(self, old_instance, new_old_ziplist):
+        """
+        Handle more advanced cases (eg Text Plugins) after the original is
+        copied
+        """
+        pass 
+ 
     def copy_relations(self, old_instance):
         """
-        Handle copying of any relations attached to this plugin
+        Handle copying of any relations attached to this plugin. Custom plugins
+        have to do this themselves!
         """
+        pass
         
     def delete_with_public(self):
         """
@@ -251,9 +261,10 @@ class CMSPlugin(Mptt):
         """
         position = self.position
         slot = self.placeholder.slot
-        if self.page and getattr(self.page, 'publisher_public'):
+        page = get_page_from_placeholder_if_exists(self.placeholder)
+        if page and getattr(page, 'publisher_public'):
             try:
-                placeholder = Placeholder.objects.get(page=self.page.publisher_public, slot=slot)
+                placeholder = Placeholder.objects.get(page=page.publisher_public, slot=slot)
             except Placeholder.DoesNotExist:
                 pass                
             else:

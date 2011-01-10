@@ -6,8 +6,9 @@ num_args=${#args[@]}
 index=0
 
 reuse_env=true
-disable_coverage=false
-
+disable_coverage=true
+django_trunk=false
+python="python" # to ensure this script works if no python option is specified
 while [ "$index" -lt "$num_args" ]
 do
     case "${args[$index]}" in
@@ -19,8 +20,17 @@ do
             reuse_env=false
             ;;
 
-        "--disable-coverage")
-            disable_coverage=true
+        "--with-coverage")
+            disable_coverage=false
+            ;;
+         
+        "--django-trunk")
+            django_trunk=true
+            ;;
+        
+        "--python")
+            let "index = $index + 1"
+            python="${args[$index]}"
             ;;
 
         "--help")
@@ -32,8 +42,10 @@ do
             echo ""
             echo "flags:"
             echo "    --failfast - abort at first failing test"
-            echo "    --disable-coverage - don't use coverage"
-            echo "    --rebuild-env - run buildout before the tests" 
+            echo "    --with-coverage - enables coverage"
+            echo "    --rebuild-env - run buildout before the tests"
+            echo "    --django-trunk - run tests against django trunk"
+            echo "    --python /path/to/python - python version to use to run the tests"
             exit 1
             ;;
 
@@ -43,14 +55,20 @@ do
     let "index = $index + 1"
 done
 
+echo "using python at: $python"
+
 if [ $reuse_env == false ]; then
     echo "setting up test environment (this might take a while)..."
-    python bootstrap.py
+    $python bootstrap.py
     if [ $? != 0 ]; then
         echo "bootstrap.py failed"
         exit 1
     fi
-    ./bin/buildout
+    if [ $django_trunk == true ]; then
+        ./bin/buildout -c django-svn.cfg
+    else
+        ./bin/buildout
+    fi
     if [ $? != 0 ]; then
         echo "bin/buildout failed"
         exit 1
